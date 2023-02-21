@@ -5,7 +5,7 @@ const LaunchRequestHandler = {
       return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
     handle(handlerInput) {
-      const speechText = 'Welcome to the movie suggestor!';
+      const speechText = 'Welcome to the movie suggester!';
 
       return handlerInput.responseBuilder
         .speak(speechText)
