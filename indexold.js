@@ -5,7 +5,7 @@ const LaunchRequestHandler = {
       return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
     handle(handlerInput) {
-      const speechText = 'Welcome to the movie suggester!';
+      const speechText = 'Welcome to the dog name generator!';
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -15,40 +15,20 @@ const LaunchRequestHandler = {
     }
   };
 
-
-  const GetMovieIntentHandler = {
+  const GetDogNameIntentHandler = {
     canHandle(handlerInput) {
       return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-        && handlerInput.requestEnvelope.request.intent.name === 'GetMovieIntent';
+        && handlerInput.requestEnvelope.request.intent.name === 'GetDogNameIntent';
     },
     handle(handlerInput) {
-        //diff lists for diff genres?
+      const dogNames = ['Milou', 'Beethoven', 'Spot', 'Rover', 'Clifford', 'Wishbone', 'Lucky', 'Bear', 'Goofy'];
+      const speechText = dogNames[Math.floor(Math.random()*dogNames.length)]; // select random name
 
-      const mood_slot = handlerInput.requestEnvelope.request.intent.slots.mood.value;
-      let speechText;
-      console.log(mood_slot);
-      const movieNames = ['Beatlejuice', 'Ghostbusters',  'Bear', 'Wild'];
-      const sadMovieNames = ['The Whale', 'The Last Five Years','The Banshies of Inisherin'];
-      const happyMovieNames = ['Mamma Mia', 'Mamma Mia 2','High School Musical'];
-
-      if (mood_slot == "sad"){
-        speechText = sadMovieNames[Math.floor(Math.random()*sadMovieNames.length)]; // select random name
-      }
-      else if (mood_slot == "happy"){
-        speechText = happyMovieNames[Math.floor(Math.random()*happyMovieNames.length)]; // select random name
-
-      }
-      else{
-        speechText = movieNames[Math.floor(Math.random()*movieNames.length)]; // select random name
-
-      }
-      console.log(speechText);
-
-      const repromptText = 'Ask for another movie name!'
+      const repromptText = 'Ask for another dog name!'
       return handlerInput.responseBuilder
         .speak(speechText)
         .reprompt(repromptText)
-        .withSimpleCard('Here\'s a movie name:', speechText)
+        .withSimpleCard('Here\'s a dog name:', speechText)
         .getResponse();
     }
   };
@@ -59,7 +39,7 @@ const LaunchRequestHandler = {
         && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
     },
     handle(handlerInput) {
-      const speechText = 'You can ask me for a movie name!';
+      const speechText = 'You can ask me for a dog name!';
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -76,7 +56,7 @@ const LaunchRequestHandler = {
           || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
     },
     handle(handlerInput) {
-      const speechText = 'Come back for more, film bro!';
+      const speechText = 'Come back for more, labrador!';
 
       return handlerInput.responseBuilder
         .speak(speechText)
@@ -119,7 +99,7 @@ exports.handler = async function (event, context) {
     skill = Alexa.SkillBuilders.custom()
       .addRequestHandlers(
         LaunchRequestHandler,
-        GetMovieIntentHandler,
+        GetDogNameIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
