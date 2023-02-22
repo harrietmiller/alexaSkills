@@ -21,8 +21,12 @@ const LaunchRequestHandler = {
       return handlerInput.requestEnvelope.request.type === 'IntentRequest'
         && handlerInput.requestEnvelope.request.intent.name === 'GetMovieIntent';
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         //diff lists for diff genres?
+
+      const attributesManager = handlerInput.attributesManager;
+      let attributes = await attributesManager.getSessionAttributes();
+      if (!attributes.hasOwnProperty('moviesName'))attributes.moviesName=[];
 
       const mood_slot = handlerInput.requestEnvelope.request.intent.slots.mood.value;
       let speechText;
@@ -44,11 +48,46 @@ const LaunchRequestHandler = {
       }
       console.log(speechText);
 
+
+      attributes.moviesName.push(speechText);
+      attributes.moviesName.push("wild");
+
+
+      handlerInput.attributesManager.setSessionAttributes(attributes);
+
+      console.log(attributes.moviesName[0]);
+      console.log(attributes.moviesName[1]);
+
+      const movie = speechText;
       const repromptText = 'Ask for another movie name!'
       return handlerInput.responseBuilder
         .speak(speechText)
         .reprompt(repromptText)
         .withSimpleCard('Here\'s a movie name:', speechText)
+        .getResponse();
+    }
+  };
+
+  const GetMovieRatingHandler = {
+    canHandle(handlerInput) {
+      return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+        && handlerInput.requestEnvelope.request.intent.name === 'GetMovieRating';
+    },
+    async handle(handlerInput) {
+        //diff lists for diff genres?
+
+      const attributesManager = handlerInput.attributesManager;
+      let attributes = await attributesManager.getSessionAttributes();
+      if (!attributes.hasOwnProperty('moviesName'))attributes.moviesName=[];
+
+      handlerInput.attributesManager.setSessionAttributes(attributes);
+
+
+      const repromptText = 'Ask for another movie name!'
+      return handlerInput.responseBuilder
+        .speak(attributes.moviesName[0])
+        .reprompt(repromptText)
+        .withSimpleCard('Here\'s a movie name:')
         .getResponse();
     }
   };
@@ -120,6 +159,7 @@ exports.handler = async function (event, context) {
       .addRequestHandlers(
         LaunchRequestHandler,
         GetMovieIntentHandler,
+        GetMovieRatingHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
