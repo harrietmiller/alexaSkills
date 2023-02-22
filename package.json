@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ask-sdk": "^2.12.1"
+    "ask-sdk": "^2.12.1",
+    "node-fetch": "^3.3.0"
   }
 }

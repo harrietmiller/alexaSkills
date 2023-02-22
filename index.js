@@ -31,7 +31,7 @@ const LaunchRequestHandler = {
       const mood_slot = handlerInput.requestEnvelope.request.intent.slots.mood.value;
       let speechText;
       console.log(mood_slot);
-      const movieNames = ['Beatlejuice', 'Ghostbusters',  'Bear', 'Wild'];
+      const movieNames = ['Beetlejuice', 'Ghostbusters',  'Bear', 'Wild'];
       const sadMovieNames = ['The Whale', 'The Last Five Years','The Banshies of Inisherin'];
       const happyMovieNames = ['Mamma Mia', 'Mamma Mia 2','High School Musical'];
 
