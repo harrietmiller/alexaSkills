@@ -1,5 +1,22 @@
 const Alexa = require('ask-sdk');
 
+const getRating = async (movieName) => {
+  try {
+      //console.log("aaaaah");
+    const response = await fetch('http://www.omdbapi.com/?t='+movieName.replace(/\s/g,'+')+'&apikey=f094a884');
+    if (!response.ok) {
+      console.log("hoi");
+    }
+    console.log("aaaaah");
+    const myJson = await response.json();
+    console.log(myJson.Title, myJson.Director);
+    return myJson.imdbRating;
+  }
+  catch (error) {
+    return 'Noi';
+  }
+}
+
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
       return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
@@ -76,16 +93,23 @@ const LaunchRequestHandler = {
     async handle(handlerInput) {
         //diff lists for diff genres?
 
+
+
       const attributesManager = handlerInput.attributesManager;
       let attributes = await attributesManager.getSessionAttributes();
       if (!attributes.hasOwnProperty('moviesName'))attributes.moviesName=[];
-
       handlerInput.attributesManager.setSessionAttributes(attributes);
+
+
+      let a = await getRating(attributes.moviesName[0])
+     // a.then((res) => {console.log(res)})
+     console.log(a);
+
 
 
       const repromptText = 'Ask for another movie name!'
       return handlerInput.responseBuilder
-        .speak(attributes.moviesName[0])
+        .speak(a)
         .reprompt(repromptText)
         .withSimpleCard('Here\'s a movie name:')
         .getResponse();
